@@ -1,8 +1,10 @@
 services:
   database:
     image: postgres:alpine3.18
-    env_file:
-      - ./.env/.env.db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
   django_uploader:
     build:
@@ -14,8 +16,15 @@ services:
       - ./upload_files_project:/usr/src/app/
     depends_on:
       - database
-    env_file:
-      - ./.env/.env.web
+    environment:
+      - SECRET_KEY=django-insecure-5=3(85+osx4ig4%^!h4bgqq6^o1i_c%h4)a8o80#)yk2q9cuxa
+      - ALLOWED_HOSTS=127.0.0.1
+      - DEBUG=1
+      - DB_HOST=database
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
+
 
   redis:
     image: redis:alpine3.18
@@ -29,8 +38,14 @@ services:
     command: -A celery_app.app worker --loglevel=info
     volumes:
       - ./upload_files_project:/usr/src/app/
-    env_file:
-      - ./.env/.env.web
+    environment:
+      - SECRET_KEY=django-insecure-5=3(85+osx4ig4%^!h4bgqq6^o1i_c%h4)a8o80#)yk2q9cuxa
+      - ALLOWED_HOSTS=127.0.0.1
+      - DEBUG=1
+      - DB_HOST=database
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
     links:
       - redis
     depends_on:
@@ -45,8 +60,14 @@ services:
     command: -A celery_app.app flower
     volumes:
       - ./upload_files_project:/usr/src/app/ 
-    env_file:
-      - ./.env/.env.web
+    environment:
+      - SECRET_KEY=django-insecure-5=3(85+osx4ig4%^!h4bgqq6^o1i_c%h4)a8o80#)yk2q9cuxa
+      - ALLOWED_HOSTS=127.0.0.1
+      - DEBUG=1
+      - DB_HOST=database
+      - DB_NAME=postgres
+      - DB_USER=postgres
+      - DB_PASS=postgres
     links:
       - redis
     depends_on:
