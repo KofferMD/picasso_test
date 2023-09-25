@@ -1,0 +1,10 @@
+Django==3.2.16
+djangorestframework==3.14.0
+djangorestframework-simplejwt
+djoser
+drf-yasg
+psycopg2-binary
+celery[redis]
+Pillow
+gunicorn
+flower

@@ -1,0 +1,56 @@
+services:
+  database:
+    image: postgres:alpine3.18
+    env_file:
+      - ./.env/.env.db
+
+  django_uploader:
+    build:
+      context: ./upload_files_project/.
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./upload_files_project:/usr/src/app/
+    depends_on:
+      - database
+    env_file:
+      - ./.env/.env.web
+
+  redis:
+    image: redis:alpine3.18
+    hostname: redis
+
+  worker:
+    build:
+      context: ./upload_files_project/.
+    hostname: worker
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./upload_files_project:/usr/src/app/
+    env_file:
+      - ./.env/.env.web
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+
+  flower:
+    build:
+      context: ./upload_files_project/.
+    hostname: flower
+    entrypoint: celery
+    command: -A celery_app.app flower
+    volumes:
+      - ./upload_files_project:/usr/src/app/ 
+    env_file:
+      - ./.env/.env.web
+    links:
+      - redis
+    depends_on:
+      - redis
+    ports:
+      - "5555:5555"
+    
