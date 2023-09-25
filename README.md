@@ -1,15 +1,36 @@
 # Загрузка и обработка файлов
 
 ## Установка
-
-* * environment прописаны в docker-compose.yml(Подумал легче будет)
-    
+   
 ```
 git clone https://github.com/KofferMD/picasso_test.git
+```
+```
+cd picasso_test
+```
+```
 docker-compose up --build
 ```
 
 ### Примеры
+** ** Документация к api.
 ```
-http://127.0.0.1:8000/redoc/
+http://31.186.100.4/redoc/
 ```
+
+** ** Flower
+```
+http://31.186.100.4:5555/
+```
+
+** ** Просмотреть все файлы.
+```
+http://31.186.100.4/api/v1/files/
+```
+
+** ** Загрузить файл.
+```
+http://31.186.100.4/api/v1/upload/
+```
+
+
